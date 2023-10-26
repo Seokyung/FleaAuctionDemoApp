@@ -1,15 +1,8 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React, {useEffect, useState} from 'react';
 import EventSource from 'react-native-sse';
+import {API_URL} from '@env';
 
 import {
-  SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -27,9 +20,7 @@ function App() {
   useEffect(() => {
     if (!listening) {
       setListening(true);
-      const eventSource = new EventSource(
-        'https://api.fleaauction.world/v2/sse/event',
-      );
+      const eventSource = new EventSource(API_URL);
 
       eventSource.addEventListener('open', event => {
         console.log('Server Connected!');
@@ -63,7 +54,7 @@ function App() {
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
+    <View>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
@@ -93,7 +84,7 @@ function App() {
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
