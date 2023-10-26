@@ -1,5 +1,5 @@
-import React from 'react';
-import {Text, View, ScrollView, StyleSheet} from 'react-native';
+import React, {useCallback, useState} from 'react';
+import {Text, View, ScrollView, StyleSheet, RefreshControl} from 'react-native';
 import MarketScreen from '../screens/MarketScreen';
 
 const testData = [
@@ -7,12 +7,21 @@ const testData = [
   {auctionId: 2, viewCount: 124},
   {auctionId: 3, viewCount: 982},
   {auctionId: 4, viewCount: 361},
-  {auctionId: 5, viewCount: 7},
+  {auctionId: 5, viewCount: 490},
   {auctionId: 6, viewCount: 65},
   {auctionId: 7, viewCount: 50},
 ];
 
 function Layout() {
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
+
   const shuffleData = arr => {
     arr.sort(() => Math.random() - 0.5);
     return arr;
@@ -27,35 +36,41 @@ function Layout() {
         <Text style={styles.sampleText}>메뉴</Text>
       </View>
       <View style={styles.svOuter}>
-        <View style={styles.sv1}>
-          {/* <MarketScreen /> */}
-          <ScrollView horizontal={true}>
-            <View style={styles.horizontalView}>
-              {shuffleData(testData).map(item => {
-                return (
-                  <View key={item.auctionId} style={styles.globalView}>
-                    <Text>작품ID ({item.auctionId})</Text>
-                    <Text>조회수: {item.viewCount}</Text>
-                  </View>
-                );
-              })}
-            </View>
-          </ScrollView>
-        </View>
-        <View style={styles.sv2}>
-          <ScrollView horizontal={true}>
-            <View style={styles.horizontalView}>
-              {shuffleData(testData).map(item => {
-                return (
-                  <View key={item.auctionId} style={styles.globalView}>
-                    <Text>작품ID ({item.auctionId})</Text>
-                    <Text>조회수: {item.viewCount}</Text>
-                  </View>
-                );
-              })}
-            </View>
-          </ScrollView>
-        </View>
+        <ScrollView
+          style={styles.svScroll}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
+          <View style={styles.sv1}>
+            {/* <MarketScreen /> */}
+            <ScrollView horizontal={true}>
+              <View style={styles.horizontalView}>
+                {shuffleData(testData).map(item => {
+                  return (
+                    <View key={item.auctionId} style={styles.globalView}>
+                      <Text>작품ID ({item.auctionId})</Text>
+                      <Text>조회수: {item.viewCount}</Text>
+                    </View>
+                  );
+                })}
+              </View>
+            </ScrollView>
+          </View>
+          <View style={styles.sv2}>
+            <ScrollView horizontal={true}>
+              <View style={styles.horizontalView}>
+                {shuffleData(testData).map(item => {
+                  return (
+                    <View key={item.auctionId} style={styles.globalView}>
+                      <Text>작품ID ({item.auctionId})</Text>
+                      <Text>조회수: {item.viewCount}</Text>
+                    </View>
+                  );
+                })}
+              </View>
+            </ScrollView>
+          </View>
+        </ScrollView>
       </View>
       <View style={styles.tapBar}>
         <Text style={styles.sampleText}>탭바</Text>
@@ -94,9 +109,14 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: 'yellow',
   },
+  svScroll: {
+    flex: 1,
+    backgroundColor: 'green',
+  },
   sv1: {flex: 1, margin: 12, backgroundColor: 'red'},
   sv2: {flex: 1, margin: 12, backgroundColor: 'blue'},
   horizontalView: {
+    flex: 1,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
@@ -104,6 +124,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   verticalView: {
+    flex: 1,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
