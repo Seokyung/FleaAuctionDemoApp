@@ -1,13 +1,7 @@
 import React from 'react';
-import {
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  useColorScheme,
-  View,
-} from 'react-native';
+import {StatusBar, StyleSheet, useColorScheme, View} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import MarketScreen from './src/screens/MarketScreen';
+import Layout from './src/components/Layout';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -16,23 +10,21 @@ function App() {
   };
 
   return (
-    <View>
+    <View style={appStyles.appContainer}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <MarketScreen isDarkMode={isDarkMode} />
-        </View>
-      </ScrollView>
+      <Layout />
     </View>
   );
 }
+
+const appStyles = StyleSheet.create({
+  appContainer: {
+    width: '100%',
+    height: '100%',
+  },
+});
 
 export default App;

@@ -3,6 +3,7 @@ import EventSource from 'react-native-sse';
 import {API_URL} from '@env';
 import {StyleSheet, Text, View} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
+import Artwork from '../components/Artwork';
 
 function MarketScreen({isDarkMode}) {
   const [listening, setListening] = useState(false);
@@ -50,12 +51,13 @@ function MarketScreen({isDarkMode}) {
         {data.map((item, idx) => {
           return (
             <View key={idx} style={marketScreenStyles.card}>
-              <Text style={marketScreenStyles.card.cardText}>
+              <Artwork item={item} />
+              {/* <Text style={marketScreenStyles.card.cardText}>
                 Auction Id: {item.auctionId}
               </Text>
               <Text style={marketScreenStyles.card.cardText}>
                 View Count: {item.viewCount}
-              </Text>
+              </Text> */}
             </View>
           );
         })}
@@ -66,6 +68,7 @@ function MarketScreen({isDarkMode}) {
 
 const marketScreenStyles = StyleSheet.create({
   marketContainer: {
+    flex: 1,
     padding: 8,
     backgroundColor: '#333',
     marketTitle: {
@@ -82,7 +85,7 @@ const marketScreenStyles = StyleSheet.create({
     },
   },
   cardContainer: {
-    // flex: 1,
+    flex: 1,
     margin: 4,
     padding: 8,
     backgroundColor: 'aliceblue',
