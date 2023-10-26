@@ -1,11 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import EventSource from 'react-native-sse';
 import {API_URL} from '@env';
-import {StyleSheet, Text, View} from 'react-native';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import Artwork from '../components/Artwork';
 
-function MarketScreen({isDarkMode}) {
+function MarketScreen() {
   const [listening, setListening] = useState(false);
   const [data, setData] = useState([]);
 
@@ -47,7 +46,7 @@ function MarketScreen({isDarkMode}) {
       <Text style={marketScreenStyles.marketContainer.marketStatus}>
         마켓 - 진행중
       </Text>
-      <View style={marketScreenStyles.cardContainer}>
+      <ScrollView style={marketScreenStyles.cardContainer} horizontal={true}>
         {data.map((item, idx) => {
           return (
             <View key={idx} style={marketScreenStyles.card}>
@@ -61,7 +60,7 @@ function MarketScreen({isDarkMode}) {
             </View>
           );
         })}
-      </View>
+      </ScrollView>
     </View>
   );
 }

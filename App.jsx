@@ -2,6 +2,7 @@ import React from 'react';
 import {StatusBar, StyleSheet, useColorScheme, View} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Layout from './src/components/Layout';
+import MarketScreen from './src/screens/MarketScreen';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -15,6 +16,7 @@ function App() {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
+      {/* <MarketScreen /> */}
       <Layout />
     </View>
   );

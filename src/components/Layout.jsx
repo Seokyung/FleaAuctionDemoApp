@@ -1,52 +1,58 @@
 import React from 'react';
 import {Text, View, ScrollView, StyleSheet} from 'react-native';
+import MarketScreen from '../screens/MarketScreen';
+
+const testData = [
+  {auctionId: 1, viewCount: 26},
+  {auctionId: 2, viewCount: 124},
+  {auctionId: 3, viewCount: 982},
+  {auctionId: 4, viewCount: 361},
+  {auctionId: 5, viewCount: 7},
+  {auctionId: 6, viewCount: 65},
+  {auctionId: 7, viewCount: 50},
+];
 
 function Layout() {
+  const shuffleData = arr => {
+    arr.sort(() => Math.random() - 0.5);
+    return arr;
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.sampleText}>헤더</Text>
       </View>
+      <View style={styles.navBar}>
+        <Text style={styles.sampleText}>메뉴</Text>
+      </View>
       <View style={styles.svOuter}>
         <View style={styles.sv1}>
+          {/* <MarketScreen /> */}
           <ScrollView horizontal={true}>
             <View style={styles.horizontalView}>
-              <View style={styles.globalView}>
-                <Text style={styles.sampleText}>1</Text>
-              </View>
-              <View style={styles.globalView}>
-                <Text style={styles.sampleText}>2</Text>
-              </View>
-              <View style={styles.globalView}>
-                <Text style={styles.sampleText}>3</Text>
-              </View>
-              <View style={styles.globalView}>
-                <Text style={styles.sampleText}>4</Text>
-              </View>
-              <View style={styles.globalView}>
-                <Text style={styles.sampleText}>5</Text>
-              </View>
+              {shuffleData(testData).map(item => {
+                return (
+                  <View key={item.auctionId} style={styles.globalView}>
+                    <Text>작품ID ({item.auctionId})</Text>
+                    <Text>조회수: {item.viewCount}</Text>
+                  </View>
+                );
+              })}
             </View>
           </ScrollView>
         </View>
         <View style={styles.sv2}>
-          <ScrollView>
-            <View style={styles.verticalView}>
-              <View style={styles.globalView}>
-                <Text style={styles.sampleText}>1</Text>
-              </View>
-              <View style={styles.globalView}>
-                <Text style={styles.sampleText}>2</Text>
-              </View>
-              <View style={styles.globalView}>
-                <Text style={styles.sampleText}>3</Text>
-              </View>
-              <View style={styles.globalView}>
-                <Text style={styles.sampleText}>4</Text>
-              </View>
-              <View style={styles.globalView}>
-                <Text style={styles.sampleText}>5</Text>
-              </View>
+          <ScrollView horizontal={true}>
+            <View style={styles.horizontalView}>
+              {shuffleData(testData).map(item => {
+                return (
+                  <View key={item.auctionId} style={styles.globalView}>
+                    <Text>작품ID ({item.auctionId})</Text>
+                    <Text>조회수: {item.viewCount}</Text>
+                  </View>
+                );
+              })}
             </View>
           </ScrollView>
         </View>
@@ -63,14 +69,21 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    flex: 1,
+    flex: 1.5,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'flex-start',
     backgroundColor: 'pink',
   },
-  tapBar: {
+  navBar: {
     flex: 1,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    backgroundColor: 'burlywood',
+  },
+  tapBar: {
+    flex: 1.5,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -112,7 +125,7 @@ const styles = StyleSheet.create({
   },
   sampleText: {
     color: '#000',
-    fontSize: 30,
+    fontSize: 24,
     fontWeight: 700,
   },
 });
