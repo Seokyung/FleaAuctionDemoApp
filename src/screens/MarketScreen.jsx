@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import EventSource from 'react-native-sse';
 import {API_URL} from '@env';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import Artwork from '../components/Artwork';
+import Artwork from '../components/artworks/Artwork';
 
 function MarketScreen() {
   const [listening, setListening] = useState(false);

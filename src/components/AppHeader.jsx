@@ -1,13 +1,22 @@
 import React from 'react';
-import {Button, Text, View} from 'react-native';
+import {Button} from 'react-native';
+import styled from 'styled-components';
 
-function AppHeader() {
+function AppHeader({StyledText}) {
   return (
-    <View>
-      <Text>마켓</Text>
-      <Button>Search</Button>
-    </View>
+    <StyledHeader>
+      <StyledText>마켓</StyledText>
+      <Button title="Search" />
+    </StyledHeader>
   );
 }
+
+const StyledHeader = styled.View`
+  flex: 1.5;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background-color: pink;
+`;
 
 export default AppHeader;

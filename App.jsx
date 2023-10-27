@@ -1,8 +1,8 @@
 import React from 'react';
-import {StatusBar, StyleSheet, useColorScheme, View} from 'react-native';
+import {StatusBar, useColorScheme} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Layout from './src/components/Layout';
-import MarketScreen from './src/screens/MarketScreen';
+import styled from 'styled-components';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -11,22 +11,19 @@ function App() {
   };
 
   return (
-    <View style={appStyles.appContainer}>
+    <AppContainer>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      {/* <MarketScreen /> */}
       <Layout />
-    </View>
+    </AppContainer>
   );
 }
 
-const appStyles = StyleSheet.create({
-  appContainer: {
-    width: '100%',
-    height: '100%',
-  },
-});
+const AppContainer = styled.View`
+  width: 100%;
+  height: 100%;
+`;
 
 export default App;
