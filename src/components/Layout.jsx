@@ -20,35 +20,62 @@ const testData = [
 
 function Layout() {
   const [refreshing, setRefreshing] = useState(false);
-  const [testDataList, setTestDataList] = useState([]);
+  const [list1, setList1] = useState([]);
+  const [list2, setList2] = useState([]);
 
-  const shuffleData = arr => {
-    arr.sort(() => Math.random() - 0.5);
+  // 작품 리스트 랜덤 배열 - Fisher-Yates Shuffle 사용
+  const fisherYatesShuffle = arr => {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
     return arr;
+  };
+
+  const shuffleList = () => {
+    setList1(
+      fisherYatesShuffle(
+        testData.map(item => {
+          return {...item};
+        }),
+      ),
+    );
+    setList2(
+      fisherYatesShuffle(
+        testData.map(item => {
+          return {...item};
+        }),
+      ),
+    );
   };
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
-      const newData = shuffleData(testData);
-      setTestDataList(newData);
+      shuffleList();
       setRefreshing(false);
     }, 1500);
   }, []);
 
   useEffect(() => {
-    const newData = shuffleData(testData);
-    setTestDataList(newData);
+    shuffleList();
   }, []);
 
   const onArtworkPress = id => {
-    const newDataList = testData.map(item => {
+    const newDataList = list1.map(item => {
       return {
         auctionId: item.auctionId,
         viewCount: item.auctionId === id ? ++item.viewCount : item.viewCount,
       };
     });
-    setTestDataList(newDataList);
+    const newDataList2 = list2.map(item => {
+      return {
+        auctionId: item.auctionId,
+        viewCount: item.auctionId === id ? ++item.viewCount : item.viewCount,
+      };
+    });
+    setList1(newDataList);
+    setList2(newDataList2);
   };
 
   return (
@@ -68,7 +95,7 @@ function Layout() {
           <View style={styles.sv1}>
             <ScrollView horizontal={true}>
               <View style={styles.horizontalView}>
-                {testDataList.map(item => {
+                {list1.map(item => {
                   return (
                     <TouchableHighlight
                       key={item.auctionId}
@@ -86,12 +113,16 @@ function Layout() {
           <View style={styles.sv2}>
             <ScrollView horizontal={true}>
               <View style={styles.horizontalView}>
-                {testDataList.map(item => {
+                {list2.map(item => {
                   return (
-                    <View key={item.auctionId} style={styles.globalView}>
-                      <Text>작품ID ({item.auctionId})</Text>
-                      <Text>조회수: {item.viewCount}</Text>
-                    </View>
+                    <TouchableHighlight
+                      key={item.auctionId}
+                      onPress={() => onArtworkPress(item.auctionId)}>
+                      <View style={styles.globalView}>
+                        <Text>작품ID ({item.auctionId})</Text>
+                        <Text>조회수: {item.viewCount}</Text>
+                      </View>
+                    </TouchableHighlight>
                   );
                 })}
               </View>
