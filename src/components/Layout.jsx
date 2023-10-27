@@ -20,8 +20,6 @@ const testData = [
 
 function Layout() {
   const [refreshing, setRefreshing] = useState(false);
-  const [list1, setList1] = useState(testData);
-  const [list2, setList2] = useState(testData);
   const [testDataList, setTestDataList] = useState([]);
 
   const shuffleData = arr => {
@@ -39,12 +37,7 @@ function Layout() {
   }, []);
 
   useEffect(() => {
-    console.log('reload');
-    const newList1 = shuffleData(list1);
-    const newList2 = shuffleData(list2);
     const newData = shuffleData(testData);
-    setList1(newList1);
-    setList2(newList2);
     setTestDataList(newData);
   }, []);
 
@@ -52,10 +45,10 @@ function Layout() {
     const newDataList = testData.map(item => {
       return {
         auctionId: item.auctionId,
-        viewCount: item.auctionId === id ? item.viewCount++ : item.viewCount,
+        viewCount: item.auctionId === id ? ++item.viewCount : item.viewCount,
       };
     });
-    setList1(newDataList);
+    setTestDataList(newDataList);
   };
 
   return (
