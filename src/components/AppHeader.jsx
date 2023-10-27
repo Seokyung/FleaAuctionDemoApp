@@ -6,16 +6,17 @@ function AppHeader({StyledText}) {
   return (
     <StyledHeader>
       <StyledText>마켓</StyledText>
-      <Button title="Search" />
+      <Button title="🔍" />
     </StyledHeader>
   );
 }
 
 const StyledHeader = styled.View`
-  flex: 1.5;
+  flex: 1;
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   background-color: pink;
 `;
 

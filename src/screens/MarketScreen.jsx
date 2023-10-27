@@ -1,31 +1,50 @@
-import React, {useState, useEffect} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
+import {RefreshControl} from 'react-native';
 import EventSource from 'react-native-sse';
 import {API_URL} from '@env';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import Artwork from '../components/artworks/Artwork';
+import {artworkList} from '../assets/artworkList';
+import AppHeader from '../components/AppHeader';
+import MenuBar from '../components/MenuBar';
+import ArtworkList from '../components/artworks/ArtworkList';
+import TabBar from '../components/TabBar';
+import styled from 'styled-components';
 
 function MarketScreen() {
-  const [listening, setListening] = useState(false);
-  const [data, setData] = useState([]);
-  const [data2, setData2] = useState({});
+  const [refreshing, setRefreshing] = useState(false);
+  const [list1, setList1] = useState([]);
+  const [list2, setList2] = useState([]);
 
-  const getData = parsedData => {
-    // console.log(parsedData);
-    const filteredData = data.filter(
-      el => el.auctionId === parsedData.auctionId,
-    );
-    console.log(filteredData);
-    if (filteredData.length === 0) {
-      // console.log('조회수 그대로');
-      setData(prev => [...prev, parsedData]);
-    } else {
-      // console.log('조회수 UP');
+  const [listening, setListening] = useState(false);
+  const [viewedData, setViewedData] = useState({});
+  const [data, setData] = useState([]);
+
+  // 작품 리스트 랜덤 배열 - Fisher-Yates Shuffle 사용
+  const fisherYatesShuffle = arr => {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
     }
-    console.log(data);
+    return arr;
+  };
+
+  const setLists = () => {
+    setList1(
+      fisherYatesShuffle(
+        artworkList.map(item => {
+          return {...item};
+        }),
+      ),
+    );
+    setList2(
+      fisherYatesShuffle(
+        artworkList.map(item => {
+          return {...item};
+        }),
+      ),
+    );
   };
 
   useEffect(() => {
-    console.log('reload');
     if (!listening) {
       setListening(true);
       const eventSource = new EventSource(API_URL);
@@ -36,28 +55,8 @@ function MarketScreen() {
 
       eventSource.addEventListener('sse.auction_viewed', event => {
         const parsedData = JSON.parse(event.data);
-        // [...prev, parsedData]
-        setData2(parsedData);
         setData(prev => [...prev, parsedData]);
-
-        // const filteredData = data.filter(
-        //   el => el.auctionId === parsedData.auctionId,
-        // );
-        // if (filteredData.length > 0) {
-        //   console.log('filter', filteredData);
-        // }
-        // setData2(parsedData);
-        // getData(parsedData);
-        // const newData = data.map(item => {
-        //   return {
-        //     auctionId: item.auctionId,
-        //     viewCount:
-        //       item.auctionId === parsedData.auctionId
-        //         ? parsedData.viewCount
-        //         : item.viewCount,
-        //   };
-        // });
-        // setData(newData);
+        setViewedData(parsedData);
       });
 
       eventSource.addEventListener('error', event => {
@@ -76,77 +75,99 @@ function MarketScreen() {
     }
   }, [listening]);
 
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setLists();
+      setRefreshing(false);
+    }, 1500);
+  }, []);
+
   useEffect(() => {
-    const filteredData = data.filter(el => el.auctionId === data2.auctionId);
-    if (filteredData.length > 1) {
-      console.log(filteredData);
-      const idx = data.findIndex(el => el.auctionId === data2.auctionId);
-      console.log(data.splice(idx, 1, data2));
-      // setData(data.splice(idx, 1, data2));
-    }
-  }, [data, setData, data2, setData2]);
+    const newDataList = list1.map(item => {
+      return {
+        auctionId: item.auctionId,
+        viewCount:
+          item.auctionId === viewedData.auctionId
+            ? viewedData.viewCount
+            : item.viewCount,
+      };
+    });
+    const newDataList2 = list2.map(item => {
+      return {
+        auctionId: item.auctionId,
+        viewCount:
+          item.auctionId === viewedData.auctionId
+            ? viewedData.viewCount
+            : item.viewCount,
+      };
+    });
+    setList1(newDataList);
+    setList2(newDataList2);
+  }, [viewedData]);
+
+  useEffect(() => {
+    setLists();
+  }, []);
+
+  const onArtworkPress = id => {
+    const newDataList = list1.map(item => {
+      return {
+        auctionId: item.auctionId,
+        viewCount: item.auctionId === id ? ++item.viewCount : item.viewCount,
+      };
+    });
+    const newDataList2 = list2.map(item => {
+      return {
+        auctionId: item.auctionId,
+        viewCount: item.auctionId === id ? ++item.viewCount : item.viewCount,
+      };
+    });
+    setList1(newDataList);
+    setList2(newDataList2);
+  };
 
   return (
-    <View style={marketScreenStyles.marketContainer}>
-      <Text style={marketScreenStyles.marketContainer.marketTitle}>
-        Flea:Auction Demo App
-      </Text>
-      <Text style={marketScreenStyles.marketContainer.marketStatus}>
-        마켓 - 진행중
-      </Text>
-      <ScrollView style={marketScreenStyles.cardContainer}>
-        {data.map((item, idx) => {
-          return (
-            <View key={idx} style={marketScreenStyles.card}>
-              <Artwork item={item} />
-              {/* <Text style={marketScreenStyles.card.cardText}>
-                Auction Id: {item.auctionId}
-              </Text>
-              <Text style={marketScreenStyles.card.cardText}>
-                View Count: {item.viewCount}
-              </Text> */}
-            </View>
-          );
-        })}
-      </ScrollView>
-    </View>
+    <MarketContainer>
+      <AppHeader StyledText={StyledText} />
+      <MenuBar StyledText={StyledText} />
+      <Content>
+        <ScrollContainer
+          contentInsetAdjustmentBehavior="automatic"
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
+          <ArtworkList list={list1} onArtworkPress={onArtworkPress} />
+          <ArtworkList list={list2} onArtworkPress={onArtworkPress} />
+          <ArtworkList list={data} onArtworkPress={onArtworkPress} />
+        </ScrollContainer>
+      </Content>
+      <TabBar StyledText={StyledText} />
+    </MarketContainer>
   );
 }
 
-const marketScreenStyles = StyleSheet.create({
-  marketContainer: {
-    flex: 1,
-    padding: 8,
-    backgroundColor: '#333',
-    marketTitle: {
-      margin: 6,
-      color: '#fff',
-      fontSize: 24,
-      fontWeight: 700,
-    },
-    marketStatus: {
-      margin: 6,
-      color: '#fff',
-      fontSize: 20,
-      fontWeight: 500,
-    },
-  },
-  cardContainer: {
-    flex: 1,
-    margin: 4,
-    padding: 8,
-    backgroundColor: 'aliceblue',
-  },
-  card: {
-    margin: 8,
-    padding: 12,
-    borderRadius: 5,
-    backgroundColor: '#555',
-    cardText: {
-      fontSize: 16,
-      color: '#fff',
-    },
-  },
-});
+const MarketContainer = styled.View`
+  flex: 1;
+  padding: 10px;
+`;
+
+const Content = styled.View`
+  flex: 8;
+  padding: 12px;
+  background-color: yellow;
+`;
+
+const ScrollContainer = styled.ScrollView`
+  flex: 1;
+  padding: 12px;
+  background-color: green;
+`;
+
+const StyledText = styled.Text`
+  color: #000;
+  font-size: 24px;
+  font-weight: 700;
+`;
 
 export default MarketScreen;
