@@ -1,15 +1,18 @@
 import React from 'react';
-import {TouchableHighlight} from 'react-native';
+import {TouchableWithoutFeedback, View} from 'react-native';
 import styled from 'styled-components';
 
 function Artwork({item, onArtworkPress}) {
   return (
-    <TouchableHighlight onPress={() => onArtworkPress(item.auctionId)}>
+    <TouchableWithoutFeedback onPress={() => onArtworkPress(item.auctionId)}>
       <ArtworkContainer>
-        <ArtworkText>작품ID ({item.auctionId})</ArtworkText>
-        <ArtworkText>조회수: {item.viewCount}</ArtworkText>
+        <ImgContainer></ImgContainer>
+        <Textbox>
+          <ArtworkText>작품ID ({item.auctionId})</ArtworkText>
+          <ArtworkText>조회수: {item.viewCount}</ArtworkText>
+        </Textbox>
       </ArtworkContainer>
-    </TouchableHighlight>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -17,12 +20,26 @@ const ArtworkContainer = styled.View`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 4px;
-  width: 100px;
-  height: 100px;
+  gap: 4px;
+  margin: 8px;
+`;
+
+const ImgContainer = styled.View`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 8px;
+  width: 150px;
+  height: 150px;
   border-radius: 10px;
-  border: 1px solid #000;
-  background-color: #ddd;
+  background-color: #fff;
+`;
+
+const Textbox = styled.View`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
 `;
 
 const ArtworkText = styled.Text`

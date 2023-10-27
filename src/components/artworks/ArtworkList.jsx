@@ -24,7 +24,8 @@ const ListContainer = styled.View`
   flex: 1;
   margin: 10px 0;
   padding: 6px;
-  background-color: lightblue;
+  border-radius: 10px;
+  background-color: rgb(170, 170, 170);
 `;
 
 const ListScroll = styled.ScrollView.attrs(() => ({
@@ -36,8 +37,6 @@ const ListScroll = styled.ScrollView.attrs(() => ({
   flex: 1;
   display: flex;
   flex-direction: row;
-  padding: 6px;
-  background-color: coral;
 `;
 
 export default ArtworkList;

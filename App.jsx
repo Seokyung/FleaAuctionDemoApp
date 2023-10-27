@@ -16,9 +16,7 @@ function App() {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <TopMargin />
       <MarketScreen />
-      <BottomMargin />
     </AppContainer>
   );
 }
@@ -28,14 +26,6 @@ const AppContainer = styled.View`
   width: 100%;
   height: 100%;
   background-color: #fff;
-`;
-
-const TopMargin = styled.View`
-  height: 6%;
-`;
-
-const BottomMargin = styled.View`
-  height: 3%;
 `;
 
 export default App;

@@ -129,45 +129,54 @@ function MarketScreen() {
 
   return (
     <MarketContainer>
-      <AppHeader StyledText={StyledText} />
-      <MenuBar StyledText={StyledText} />
+      <TopMargin />
       <Content>
-        <ScrollContainer
-          contentInsetAdjustmentBehavior="automatic"
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }>
-          <ArtworkList list={list1} onArtworkPress={onArtworkPress} />
-          <ArtworkList list={list2} onArtworkPress={onArtworkPress} />
-          <ArtworkList list={data} onArtworkPress={onArtworkPress} />
-        </ScrollContainer>
+        <AppHeader />
+        <Body>
+          <MenuBar />
+          <ScrollContainer
+            contentInsetAdjustmentBehavior="automatic"
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }>
+            <ArtworkList list={list1} onArtworkPress={onArtworkPress} />
+            <ArtworkList list={list2} onArtworkPress={onArtworkPress} />
+          </ScrollContainer>
+        </Body>
+        <TabBar />
       </Content>
-      <TabBar StyledText={StyledText} />
+      <BottomMargin />
     </MarketContainer>
   );
 }
 
 const MarketContainer = styled.View`
   flex: 1;
-  padding: 10px;
+`;
+
+const TopMargin = styled.View`
+  height: 2.5%;
+`;
+const BottomMargin = styled.View`
+  height: 4%;
 `;
 
 const Content = styled.View`
+  flex: 1;
+  height: 90%;
+`;
+
+const Body = styled.View`
   flex: 8;
   padding: 12px;
-  background-color: yellow;
 `;
 
-const ScrollContainer = styled.ScrollView`
-  flex: 1;
-  padding: 12px;
-  background-color: green;
-`;
-
-const StyledText = styled.Text`
-  color: #000;
-  font-size: 24px;
-  font-weight: 700;
+const ScrollContainer = styled.ScrollView.attrs(() => ({
+  contentContainerStyle: {
+    flex: 9,
+  },
+}))`
+  padding: 2px;
 `;
 
 export default MarketScreen;

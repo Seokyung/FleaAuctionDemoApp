@@ -2,10 +2,10 @@ import React from 'react';
 import {Button} from 'react-native';
 import styled from 'styled-components';
 
-function AppHeader({StyledText}) {
+function AppHeader() {
   return (
     <StyledHeader>
-      <StyledText>마켓</StyledText>
+      <HeaderText>마켓</HeaderText>
       <Button title="🔍" />
     </StyledHeader>
   );
@@ -16,8 +16,14 @@ const StyledHeader = styled.View`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
-  background-color: pink;
+  align-items: flex-end;
+  padding: 2px 16px;
+`;
+
+const HeaderText = styled.Text`
+  color: #000;
+  font-size: 24px;
+  font-weight: 700;
 `;
 
 export default AppHeader;
