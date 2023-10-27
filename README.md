@@ -57,6 +57,10 @@ Now that you have successfully run the app, let's modify it.
 
    For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
 
+## Step 4: 서버 연결 오류 시
+
+서버 연결 중 오류가 발생하면 src/screens/MarketScreen.jsx 파일의 API_URL을 서버의 API 주소로 변경한 후 다시 빌드해주세요.
+
 ## Congratulations! :tada:
 
 You've successfully run and modified your React Native App. :partying_face:
