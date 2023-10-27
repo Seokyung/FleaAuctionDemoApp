@@ -27,6 +27,7 @@ function MarketScreen() {
     return arr;
   };
 
+  // 각 작품 리스트 순서 랜덤 정렬
   const setLists = () => {
     setList1(
       fisherYatesShuffle(
@@ -44,6 +45,7 @@ function MarketScreen() {
     );
   };
 
+  // 실시간으로 SSE 이벤트 스트림 수신
   useEffect(() => {
     if (!listening) {
       setListening(true);
@@ -75,6 +77,7 @@ function MarketScreen() {
     }
   }, [listening]);
 
+  // pull-to-refresh 시 작품 리스트 재정렬
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
@@ -83,6 +86,7 @@ function MarketScreen() {
     }, 1500);
   }, []);
 
+  // 조회수 증가할 때마다 각 작품 리스트의 해당 작품 조회수 변경 및 동기화
   useEffect(() => {
     const newDataList = list1.map(item => {
       return {
@@ -110,6 +114,7 @@ function MarketScreen() {
     setLists();
   }, []);
 
+  // 작품 터치 시 조회수 증가
   const onArtworkPress = id => {
     const newDataList = list1.map(item => {
       return {
