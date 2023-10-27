@@ -1,6 +1,12 @@
-import React, {useCallback, useState} from 'react';
-import {Text, View, ScrollView, StyleSheet, RefreshControl} from 'react-native';
-import MarketScreen from '../screens/MarketScreen';
+import React, {useCallback, useEffect, useState} from 'react';
+import {
+  Text,
+  View,
+  ScrollView,
+  StyleSheet,
+  RefreshControl,
+  TouchableHighlight,
+} from 'react-native';
 
 const testData = [
   {auctionId: 1, viewCount: 26},
@@ -14,17 +20,42 @@ const testData = [
 
 function Layout() {
   const [refreshing, setRefreshing] = useState(false);
-
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 2000);
-  }, []);
+  const [list1, setList1] = useState(testData);
+  const [list2, setList2] = useState(testData);
+  const [testDataList, setTestDataList] = useState([]);
 
   const shuffleData = arr => {
     arr.sort(() => Math.random() - 0.5);
     return arr;
+  };
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      const newData = shuffleData(testData);
+      setTestDataList(newData);
+      setRefreshing(false);
+    }, 1500);
+  }, []);
+
+  useEffect(() => {
+    console.log('reload');
+    const newList1 = shuffleData(list1);
+    const newList2 = shuffleData(list2);
+    const newData = shuffleData(testData);
+    setList1(newList1);
+    setList2(newList2);
+    setTestDataList(newData);
+  }, []);
+
+  const onArtworkPress = id => {
+    const newDataList = testData.map(item => {
+      return {
+        auctionId: item.auctionId,
+        viewCount: item.auctionId === id ? item.viewCount++ : item.viewCount,
+      };
+    });
+    setList1(newDataList);
   };
 
   return (
@@ -37,20 +68,23 @@ function Layout() {
       </View>
       <View style={styles.svOuter}>
         <ScrollView
-          style={styles.svScroll}
+          contentContainerStyle={styles.svScroll}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
           <View style={styles.sv1}>
-            {/* <MarketScreen /> */}
             <ScrollView horizontal={true}>
               <View style={styles.horizontalView}>
-                {shuffleData(testData).map(item => {
+                {testDataList.map(item => {
                   return (
-                    <View key={item.auctionId} style={styles.globalView}>
-                      <Text>작품ID ({item.auctionId})</Text>
-                      <Text>조회수: {item.viewCount}</Text>
-                    </View>
+                    <TouchableHighlight
+                      key={item.auctionId}
+                      onPress={() => onArtworkPress(item.auctionId)}>
+                      <View style={styles.globalView}>
+                        <Text>작품ID ({item.auctionId})</Text>
+                        <Text>조회수: {item.viewCount}</Text>
+                      </View>
+                    </TouchableHighlight>
                   );
                 })}
               </View>
@@ -59,7 +93,7 @@ function Layout() {
           <View style={styles.sv2}>
             <ScrollView horizontal={true}>
               <View style={styles.horizontalView}>
-                {shuffleData(testData).map(item => {
+                {testDataList.map(item => {
                   return (
                     <View key={item.auctionId} style={styles.globalView}>
                       <Text>작품ID ({item.auctionId})</Text>
@@ -111,6 +145,7 @@ const styles = StyleSheet.create({
   },
   svScroll: {
     flex: 1,
+    padding: 8,
     backgroundColor: 'green',
   },
   sv1: {flex: 1, margin: 12, backgroundColor: 'red'},
@@ -119,14 +154,6 @@ const styles = StyleSheet.create({
     flex: 1,
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  verticalView: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
