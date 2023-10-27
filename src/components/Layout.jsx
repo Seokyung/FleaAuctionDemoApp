@@ -8,6 +8,10 @@ import {
   TouchableHighlight,
 } from 'react-native';
 
+import EventSource from 'react-native-sse';
+import {API_URL} from '@env';
+import {artworkList} from '../assets/artworkList';
+
 const testData = [
   {auctionId: 1, viewCount: 26},
   {auctionId: 2, viewCount: 124},
@@ -23,6 +27,9 @@ function Layout() {
   const [list1, setList1] = useState([]);
   const [list2, setList2] = useState([]);
 
+  const [listening, setListening] = useState(false);
+  const [viewedData, setViewedData] = useState({});
+
   // 작품 리스트 랜덤 배열 - Fisher-Yates Shuffle 사용
   const fisherYatesShuffle = arr => {
     for (let i = arr.length - 1; i > 0; i--) {
@@ -32,33 +39,86 @@ function Layout() {
     return arr;
   };
 
-  const shuffleList = () => {
+  const setLists = () => {
     setList1(
       fisherYatesShuffle(
-        testData.map(item => {
+        artworkList.map(item => {
           return {...item};
         }),
       ),
     );
     setList2(
       fisherYatesShuffle(
-        testData.map(item => {
+        artworkList.map(item => {
           return {...item};
         }),
       ),
     );
   };
 
+  useEffect(() => {
+    if (!listening) {
+      setListening(true);
+      const eventSource = new EventSource(API_URL);
+
+      eventSource.addEventListener('open', event => {
+        console.log('Server Connected!');
+      });
+
+      eventSource.addEventListener('sse.auction_viewed', event => {
+        const parsedData = JSON.parse(event.data);
+        setViewedData(parsedData);
+      });
+
+      eventSource.addEventListener('error', event => {
+        if (event.type === 'error') {
+          console.error('Connection error:', event.message);
+        } else if (event.type === 'exception') {
+          console.error('Error:', event.message, event.error);
+        }
+      });
+
+      return () => {
+        eventSource.addEventListener('close', event => {
+          console.log('Close Connection.');
+        });
+      };
+    }
+  }, [listening]);
+
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
-      shuffleList();
+      setLists();
       setRefreshing(false);
     }, 1500);
   }, []);
 
   useEffect(() => {
-    shuffleList();
+    const newDataList = list1.map(item => {
+      return {
+        auctionId: item.auctionId,
+        viewCount:
+          item.auctionId === viewedData.auctionId
+            ? viewedData.viewCount
+            : item.viewCount,
+      };
+    });
+    const newDataList2 = list2.map(item => {
+      return {
+        auctionId: item.auctionId,
+        viewCount:
+          item.auctionId === viewedData.auctionId
+            ? viewedData.viewCount
+            : item.viewCount,
+      };
+    });
+    setList1(newDataList);
+    setList2(newDataList2);
+  }, [viewedData]);
+
+  useEffect(() => {
+    setLists();
   }, []);
 
   const onArtworkPress = id => {
@@ -128,6 +188,24 @@ function Layout() {
               </View>
             </ScrollView>
           </View>
+          {/* <View style={styles.sv3}>
+            <ScrollView horizontal={true}>
+              <View style={styles.horizontalView}>
+                {data.map(item => {
+                  return (
+                    <TouchableHighlight
+                      key={item.auctionId}
+                      onPress={() => onArtworkPress(item.auctionId)}>
+                      <View style={styles.globalView}>
+                        <Text>작품ID ({item.auctionId})</Text>
+                        <Text>조회수: {item.viewCount}</Text>
+                      </View>
+                    </TouchableHighlight>
+                  );
+                })}
+              </View>
+            </ScrollView>
+          </View> */}
         </ScrollView>
       </View>
       <View style={styles.tapBar}>
@@ -174,6 +252,7 @@ const styles = StyleSheet.create({
   },
   sv1: {flex: 1, margin: 12, backgroundColor: 'red'},
   sv2: {flex: 1, margin: 12, backgroundColor: 'blue'},
+  sv3: {flex: 1, margin: 12, backgroundColor: '#333'},
   horizontalView: {
     flex: 1,
     display: 'flex',

@@ -1,174 +1,174 @@
 export const artworkList = [
   {
     auctionId: 3965,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3966,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3967,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3968,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3969,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3970,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3971,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3972,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3973,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3974,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3975,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3976,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3977,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3978,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3979,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3980,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3981,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3982,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3983,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3984,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3985,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3986,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3987,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3988,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3989,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3990,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3991,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3992,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3993,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3994,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3995,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3996,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3997,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3998,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 3999,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 4000,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 4001,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 4002,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 4003,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 4004,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 4005,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 4006,
-    title: '',
+    viewCount: 0,
   },
   {
     auctionId: 4007,
-    title: '',
+    viewCount: 0,
   },
 ];
